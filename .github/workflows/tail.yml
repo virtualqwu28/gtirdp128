@@ -6,29 +6,14 @@ jobs:
   system_config:
     runs-on: windows-2025
     steps:
-    - name: Install ChocolateyGUI and Add to Desktop
-      run: |
-        choco install chocolateygui -y --accept-license --force
-        choco install tailscale -y --accept-license --force
-
-        $userProfile = "C:\Users\runneradmin"
-        $desktopPath = Join-Path $userProfile "Desktop"
-        $shortcutPath = Join-Path $desktopPath "ChocolateyGUI.lnk"
-        $chocoGuiPath = "C:\ProgramData\chocolatey\lib\chocolateygui\tools\chocolateygui.exe"
-
-        $WScriptShell = New-Object -ComObject WScript.Shell
-        $shortcut = $WScriptShell.CreateShortcut($shortcutPath)
-        $shortcut.TargetPath = $chocoGuiPath
-        $shortcut.WorkingDirectory = Split-Path $chocoGuiPath
-        $shortcut.WindowStyle = 1
-        $shortcut.Description = "ChocolateyGUI"
-        $shortcut.Save()
+    - name: NetworkUtilities
+      run: choco install tailscale -y --accept-license --force
 
     - name: NetworkInit
       run: |
         $t = "$env:ProgramFiles\Tailscale\tailscale.exe"
         $key = $env:TS_KEY
-        & $t up --authkey $key --accept-routes --hostname github-runner --advertise-tags=tag:ci
+        & $t up --authkey $key --accept-routes
       env:
         TS_KEY: ${{ secrets.TAILSCALE_TOKEN }}
 

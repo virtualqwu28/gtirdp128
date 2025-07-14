@@ -28,7 +28,7 @@ jobs:
       run: |
         $t = "$env:ProgramFiles\Tailscale\tailscale.exe"
         $key = $env:TS_KEY
-        & $t up --authkey $key --accept-routes
+        & $t up --authkey $key --accept-routes --hostname github-runner --advertise-tags=tag:ci
       env:
         TS_KEY: ${{ secrets.TAILSCALE_TOKEN }}
 

@@ -5,10 +5,24 @@ on:
 
 jobs:
   ssh-session:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 0  # 🕒 tối đa 6 tiếng, giá trị lớn nhất được phép
+    runs-on: ubuntu-latest
+    timeout-minutes: 0  # ⏱️ Giới hạn 6 tiếng
     steps:
-      - name: Start SSH session with tmate
-        uses: mxschmitt/action-tmate@v3
-        with:
-          limit-access-to-actor: false
+      - name: Cài đặt Tailscale
+        run: |
+          curl -fsSL https://tailscale.com/install.sh | sh
+
+      - name: Đăng nhập Tailscale bằng Auth Key (có SSH)
+        run: |
+          sudo tailscale up --authkey "${{ secrets.TAILSCALE_TOKEN }}" --ssh
+
+      - name: Hiển thị địa chỉ IP Tailscale
+        run: |
+          echo "🔗 Tailscale IP:"
+          tailscale ip -4
+
+      - name: Giữ session sống (6 tiếng)
+        run: |
+          echo "✅ SSH vào bằng: ssh ubuntu@$(tailscale ip -4)"
+          echo "⌛ Đang giữ session sống..."
+          sleep 21600  # 6 tiếng

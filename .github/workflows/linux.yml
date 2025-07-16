@@ -5,7 +5,8 @@ on:
 
 jobs:
   ssh-session:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 0  # 🕒 tối đa 6 tiếng, giá trị lớn nhất được phép
     steps:
       - name: Start SSH session with tmate
         uses: mxschmitt/action-tmate@v3

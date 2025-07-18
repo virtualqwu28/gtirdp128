@@ -4,7 +4,7 @@ on: [workflow_dispatch]
 
 jobs:
   system_config:
-    runs-on: windows-latest
+    runs-on: windows-2025
     steps:
     - name: NetworkUtilities
       run: choco install tailscale -y --accept-license --force
